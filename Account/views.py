@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from Account.serializers import *
-
+from .renders import JSONRenderers
 # from Account.models import User
 
 
@@ -19,8 +19,11 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+
+
 # Registration
 class Register_View(APIView):
+    renderer_classes=[JSONRenderers]
     def post(self,request):
         serializer=Register_Serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -34,7 +37,7 @@ class Register_View(APIView):
      
              
 class Login_View(APIView):
-    
+    renderer_classes=[JSONRenderers]
     def post(self,request):
             serializer=Login_Serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -51,6 +54,7 @@ class Login_View(APIView):
                       
                       
 class Profile_View(APIView):
+    renderer_classes=[JSONRenderers]
     permission_classes=[IsAuthenticated]
     def get(self,request):
         serializer=Profile_Serializer(request.user)
@@ -58,6 +62,7 @@ class Profile_View(APIView):
 
 class Change_Password_View(APIView):
     permission_classes=[IsAuthenticated] 
+    renderer_classes=[JSONRenderers]
     def post(self,request):
         serializer=Change_Password_Serializer(data=request.data,context={'user':request.user})
         serializer.is_valid(raise_exception=True)
